@@ -10,6 +10,7 @@
 
 import React from 'react';
 import { SafeAreaView, StyleSheet, ScrollView, View, Text, StatusBar } from 'react-native';
+import { NavigationContainer } from '@react-navigation/native';
 
 import {
   Header,
@@ -23,7 +24,7 @@ declare const global: { HermesInternal: null | {} };
 
 const App = () => {
   return (
-    <>
+    <NavigationContainer>
       <StatusBar barStyle="dark-content" />
       <SafeAreaView>
         <ScrollView contentInsetAdjustmentBehavior="automatic" style={styles.scrollView}>
@@ -63,7 +64,7 @@ const App = () => {
           </View>
         </ScrollView>
       </SafeAreaView>
-    </>
+    </NavigationContainer>
   );
 };
 
