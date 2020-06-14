@@ -2,11 +2,11 @@
 import { postsEndpoint } from './endpoints';
 
 // TYPES
-import { PostItem } from 'src/types';
+import { Post } from 'src/types';
 
 interface PostsServiceResponse {
   success: boolean;
-  payload: PostItem[];
+  payload: Post[];
   error: string;
 }
 

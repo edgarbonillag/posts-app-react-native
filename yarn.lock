@@ -6061,6 +6061,13 @@ react-native@0.62.2:
     use-subscription "^1.0.0"
     whatwg-fetch "^3.0.0"
 
+react-navigation-props-mapper@2.0.0:
+  version "2.0.0"
+  resolved "https://registry.yarnpkg.com/react-navigation-props-mapper/-/react-navigation-props-mapper-2.0.0.tgz#12f801f6f39171b2c1aef95b36b1b5971aa17f87"
+  integrity sha512-+K3oEjWTWPTxKoXIe0vUG+pbBGc66BJc4jNgMN6XoACtEgdujGCtW6dHLnq123sFgX1Lsnd1Tgt/BoJlSGIDUA==
+  dependencies:
+    hoist-non-react-statics "^3.3.0"
+
 react-redux@^7.2.0:
   version "7.2.0"
   resolved "https://registry.yarnpkg.com/react-redux/-/react-redux-7.2.0.tgz#f970f62192b3981642fec46fd0db18a074fe879d"

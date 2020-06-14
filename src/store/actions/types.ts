@@ -1,6 +1,6 @@
 // POSTS
 
-import { Comment, PostItem } from '../../types';
+import { Comment, Post } from '../../types';
 
 export const GET_POSTS = 'SAVE_POSTS';
 export const SET_LOADING_POSTS = 'SET_LOADING_POSTS';
@@ -8,7 +8,7 @@ export const SET_LOADING_POSTS = 'SET_LOADING_POSTS';
 interface GetPostsAction {
   type: typeof GET_POSTS;
   payload: {
-    posts?: PostItem[];
+    posts?: Post[];
     error?: string;
   };
   error: boolean;

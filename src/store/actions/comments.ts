@@ -23,7 +23,7 @@ export const getCommentsOfAPost = ({ postId }: { postId: number }) => {
         error: true,
         payload: { error: 'An unexpected error occurred' },
       });
-      console.log('error on getPosts action', error);
+      console.log('error on getComments action', error);
     }
   };
 };

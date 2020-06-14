@@ -1,10 +1,10 @@
 import { SET_LOADING_POSTS, GET_POSTS, PostsActionTypes } from '../actions/types';
-import { PostItem } from '../../types';
+import { Post } from '../../types';
 
 export interface PostsState {
   error: string;
   loading: boolean;
-  posts: PostItem[];
+  posts: Post[];
 }
 
 const initialState: PostsState = {

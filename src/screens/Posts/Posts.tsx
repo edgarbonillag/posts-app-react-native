@@ -1,13 +1,16 @@
 // REACT & REACT NATIVE
 import React, { Component } from 'react';
-import { SafeAreaView, StatusBar, Text } from 'react-native';
+import { ActivityIndicator, FlatList, StatusBar, Text } from 'react-native';
 
 // NAVIGATION
 import { StackNavigationProp } from '@react-navigation/stack';
 import { MainStackParamList } from '../../navigation/MainStack';
 
+// COMPONENTS
+import { PostListItem } from '../../components';
+
 // STYLED
-import { GoToPostButton, NiceView } from './styled';
+import { MainContainer } from './styled';
 import { theme } from '../../theme/colors';
 
 // REDUX
@@ -28,6 +31,7 @@ const connector = connect(mapStateToProps, mapDispatchToProps);
 
 // TYPES
 import { RootState } from '../../store';
+import { Post } from '../../types';
 type PostsScreenNavigationProp = StackNavigationProp<MainStackParamList, 'Posts'>;
 type PropsFromRedux = ConnectedProps<typeof connector>;
 type Props = PropsFromRedux & {
@@ -45,21 +49,35 @@ class Posts extends Component<Props> {
     getPostsList();
   };
 
+  renderListItems = ({ item, index }: { item: Post; index: number }) => {
+    const { navigation } = this.props;
+    return (
+      <PostListItem
+        isFavorite={false}
+        isRead={index < 21}
+        onPress={() => navigation.navigate('PostDetails', { post: item })}
+        text={item.title}
+      />
+    );
+  };
+
   render() {
-    const { navigation, error, loading, posts } = this.props;
-    console.log('error', error, 'loading', loading, 'posts', posts);
+    const { error, loading, posts } = this.props;
     return (
       <>
         <StatusBar barStyle="light-content" backgroundColor={theme.darkMainGreen} />
-        <SafeAreaView>
-          <Text>Posts Screen</Text>
-          <GoToPostButton onPress={() => navigation.navigate('PostDetails')}>
-            <Text>GO TO POST DETAILS SCREEN</Text>
-          </GoToPostButton>
-          <NiceView>
-            <Text>THIS IS A NICE VIEW</Text>
-          </NiceView>
-        </SafeAreaView>
+        <MainContainer>
+          {!!error && <Text>{error}</Text>}
+          {loading ? (
+            <ActivityIndicator color={theme.mainGreen} size="large" />
+          ) : (
+            <FlatList
+              data={posts}
+              keyExtractor={(item) => `${item.id}`}
+              renderItem={this.renderListItems}
+            />
+          )}
+        </MainContainer>
       </>
     );
   }

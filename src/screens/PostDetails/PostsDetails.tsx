@@ -1,18 +1,22 @@
 // REACT & REACT NATIVE
 import React, { Component } from 'react';
-import { SafeAreaView, Text, StatusBar } from 'react-native';
+import { ActivityIndicator, SafeAreaView, StatusBar, Text } from 'react-native';
 
 // NAVIGATION
 import { StackNavigationProp } from '@react-navigation/stack';
+import { withMappedNavigationParams } from 'react-navigation-props-mapper';
 import { MainStackParamList } from '../../navigation/MainStack';
 
 // STYLED
 import { theme } from '../../theme/colors';
 
 // REDUX
+import { compose } from 'redux';
 import { connect, ConnectedProps } from 'react-redux';
 import { RootState } from '../../store';
 import { getCommentsOfAPost as getCommentsAction } from '../../store/actions';
+import { Post } from 'src/types';
+import { FlatList } from 'react-native-gesture-handler';
 
 const mapStateToProps = ({ comments }: RootState) => ({
   error: comments.error,
@@ -31,6 +35,7 @@ type PostDetailsScreenNavigationProp = StackNavigationProp<MainStackParamList, '
 type PropsFromRedux = ConnectedProps<typeof connector>;
 type Props = PropsFromRedux & {
   navigation: PostDetailsScreenNavigationProp;
+  post: Post;
 };
 
 // MAIN CODE
@@ -41,23 +46,32 @@ class PostDetails extends Component<Props> {
   }
 
   getComments = () => {
-    const { getCommentsList } = this.props;
-    getCommentsList({ postId: 1 });
+    const { getCommentsList, post } = this.props;
+    getCommentsList({ postId: post.id });
   };
 
   render() {
     const { error, loading, comments } = this.props;
-    console.log('error', error, 'loading', loading, 'comments', comments);
+    // console.log('error', error, 'loading', loading, 'comments', comments);
 
     return (
       <>
         <StatusBar barStyle="light-content" backgroundColor={theme.darkMainGreen} />
         <SafeAreaView>
-          <Text>Post Details Screen</Text>
+          {!!error && <Text>{error}</Text>}
+          {loading ? (
+            <ActivityIndicator color={theme.mainGreen} size="large" />
+          ) : (
+            <FlatList
+              data={comments}
+              keyExtractor={(item) => `${item.id}`}
+              renderItem={({ item }) => <Text>{item.body}</Text>}
+            />
+          )}
         </SafeAreaView>
       </>
     );
   }
 }
 
-export default connector(PostDetails);
+export default compose(withMappedNavigationParams(), connector)(PostDetails);

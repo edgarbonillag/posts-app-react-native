@@ -6,7 +6,7 @@ export interface Comment {
   body: string;
 }
 
-export interface PostItem {
+export interface Post {
   userId: number;
   id: number;
   title: string;

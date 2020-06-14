@@ -1,1 +1,1 @@
-export const randomVariable = 'Hi!';
+export { default as PostListItem } from './PostListItem';

@@ -9,11 +9,12 @@ import { PostDetailsScreen, PostsScreen } from '../screens';
 
 // UTILS
 import { theme } from '../theme/colors';
+import { Post } from '../types';
 
 // TYPES
 export type MainStackParamList = {
   Posts: undefined;
-  PostDetails: undefined;
+  PostDetails: { post: Post };
 };
 
 // MAIN CODE
