@@ -1,1 +1,1 @@
-// Empty file for now
+export const randomVariable = 'Hi!';

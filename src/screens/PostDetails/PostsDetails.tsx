@@ -48,7 +48,7 @@ class PostDetails extends Component<Props> {
   render() {
     const { error, loading, comments } = this.props;
     console.log('error', error, 'loading', loading, 'comments', comments);
-    const unusedVariable = 'Hi!';
+
     return (
       <>
         <StatusBar barStyle="light-content" backgroundColor={theme.darkMainGreen} />
