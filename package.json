@@ -7,7 +7,7 @@
     "ios": "react-native run-ios",
     "start": "react-native start",
     "test": "jest",
-    "ts": "tsc --watch --noEmit --skipLibCheck",
+    "check-ts": "tsc --watch --noEmit --skipLibCheck",
     "lint": "eslint . --ext .js,.jsx,.ts,.tsx"
   },
   "dependencies": {
@@ -46,6 +46,11 @@
     "react-devtools": "^4.7.0",
     "react-test-renderer": "16.11.0",
     "typescript": "^3.8.3"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "tsc --noEmit --skipLibCheck"
+    }
   },
   "jest": {
     "preset": "react-native",

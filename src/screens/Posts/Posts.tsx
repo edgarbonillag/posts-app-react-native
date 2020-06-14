@@ -14,10 +14,10 @@ import { theme } from '../../theme/colors';
 import { connect, ConnectedProps } from 'react-redux';
 import { getPosts as getPostsAction } from '../../store/actions';
 
-const mapStateToProps = (store: RootState) => ({
-  error: store.posts.error,
-  loading: store.posts.loading,
-  posts: store.posts.posts,
+const mapStateToProps = ({ posts }: RootState) => ({
+  error: posts.error,
+  loading: posts.loading,
+  posts: posts.posts,
 });
 
 const mapDispatchToProps = {
@@ -29,9 +29,7 @@ const connector = connect(mapStateToProps, mapDispatchToProps);
 // TYPES
 import { RootState } from '../../store';
 type PostsScreenNavigationProp = StackNavigationProp<MainStackParamList, 'Posts'>;
-
 type PropsFromRedux = ConnectedProps<typeof connector>;
-
 type Props = PropsFromRedux & {
   navigation: PostsScreenNavigationProp;
 };
