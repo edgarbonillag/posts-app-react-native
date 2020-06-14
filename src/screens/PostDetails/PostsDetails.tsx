@@ -21,7 +21,7 @@ const mapStateToProps = ({ comments }: RootState) => ({
 });
 
 const mapDispatchToProps = {
-  getCommentsList: () => getCommentsAction({ postId: 1 }),
+  getCommentsList: ({ postId }: { postId: number }) => getCommentsAction({ postId }),
 };
 
 const connector = connect(mapStateToProps, mapDispatchToProps);
@@ -42,7 +42,7 @@ class PostDetails extends Component<Props> {
 
   getComments = () => {
     const { getCommentsList } = this.props;
-    getCommentsList();
+    getCommentsList({ postId: 1 });
   };
 
   render() {
