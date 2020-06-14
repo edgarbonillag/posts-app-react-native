@@ -1,1 +1,1 @@
-export const randomVariable = 'Hi!';
+export { getPostsService } from './posts';
