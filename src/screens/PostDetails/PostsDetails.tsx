@@ -1,11 +1,14 @@
 // REACT & REACT NATIVE
 import React, { Component } from 'react';
-import { ActivityIndicator, SafeAreaView, StatusBar, Text } from 'react-native';
+import { ActivityIndicator, Alert, SafeAreaView, StatusBar, Text } from 'react-native';
 
 // NAVIGATION
 import { StackNavigationProp } from '@react-navigation/stack';
 import { withMappedNavigationParams } from 'react-navigation-props-mapper';
 import { MainStackParamList } from '../../navigation/MainStack';
+
+// COMPONENTS
+import { FavoriteButton } from '../../components';
 
 // STYLED
 import { theme } from '../../theme/colors';
@@ -42,6 +45,10 @@ type Props = PropsFromRedux & {
 
 class PostDetails extends Component<Props> {
   componentDidMount() {
+    const { navigation } = this.props;
+    navigation.setOptions({
+      headerRight: () => <FavoriteButton onPress={() => Alert.alert('Hello!')} />,
+    });
     this.getComments();
   }
 

@@ -1,13 +1,13 @@
 // REACT & REACT NATIVE
 import React, { Component } from 'react';
-import { ActivityIndicator, FlatList, StatusBar, Text } from 'react-native';
+import { ActivityIndicator, Alert, FlatList, StatusBar, Text } from 'react-native';
 
 // NAVIGATION
 import { StackNavigationProp } from '@react-navigation/stack';
 import { MainStackParamList } from '../../navigation/MainStack';
 
 // COMPONENTS
-import { PostListItem } from '../../components';
+import { PostListItem, RefreshButton } from '../../components';
 
 // STYLED
 import { MainContainer } from './styled';
@@ -41,6 +41,10 @@ type Props = PropsFromRedux & {
 // MAIN CODE
 class Posts extends Component<Props> {
   componentDidMount() {
+    const { navigation } = this.props;
+    navigation.setOptions({
+      headerRight: () => <RefreshButton onPress={() => Alert.alert('Hello!')} />,
+    });
     this.getPosts();
   }
 

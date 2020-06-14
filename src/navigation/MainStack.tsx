@@ -7,11 +7,15 @@ import { createStackNavigator } from '@react-navigation/stack';
 // SCREENS
 import { PostDetailsScreen, PostsScreen } from '../screens';
 
+// COMPONENTS
+import { FavoriteButton } from '../components';
+
 // UTILS
 import { theme } from '../theme/colors';
-import { Post } from '../types';
+import { isIos } from '../utils/platform';
 
 // TYPES
+import { Post } from '../types';
 export type MainStackParamList = {
   Posts: undefined;
   PostDetails: { post: Post };
@@ -23,6 +27,7 @@ const Stack = createStackNavigator<MainStackParamList>();
 const { Navigator, Screen } = Stack;
 
 const commonScreenOptions = {
+  headerBackTitleVisible: false,
   headerStyle: {
     backgroundColor: theme.mainGreen,
   },
@@ -35,7 +40,11 @@ const commonScreenOptions = {
 const MainStack = () => (
   <Navigator initialRouteName="Posts" screenOptions={commonScreenOptions}>
     <Screen component={PostsScreen} name="Posts" />
-    <Screen component={PostDetailsScreen} name="PostDetails" options={{ title: 'Post' }} />
+    <Screen
+      component={PostDetailsScreen}
+      name="PostDetails"
+      options={{ headerRight: () => <FavoriteButton />, title: isIos ? 'Post' : '' }}
+    />
   </Navigator>
 );
 
