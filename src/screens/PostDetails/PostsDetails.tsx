@@ -1,6 +1,6 @@
 // REACT & REACT NATIVE
 import React, { Component } from 'react';
-import { ActivityIndicator, Alert, StatusBar } from 'react-native';
+import { ActivityIndicator, FlatList, StatusBar } from 'react-native';
 
 // NAVIGATION
 import { StackNavigationProp } from '@react-navigation/stack';
@@ -30,14 +30,16 @@ import { RootState } from '../../store';
 import {
   getCommentsOfAPost as getCommentsAction,
   getUserDetails as getUserInfoAction,
+  markPostAsFavorite as markPostAsFavoriteAction,
 } from '../../store/actions';
-import { Comment, Post, User } from '../../types';
-import { FlatList } from 'react-native-gesture-handler';
+import { Comment, PostEnhanced, User } from '../../types';
 
-const mapStateToProps = ({ comments, users }: RootState) => ({
+const mapStateToProps = ({ comments, posts, users }: RootState) => ({
   comments: comments.comments,
   commentsError: comments.error,
   commentsLoading: comments.loading,
+  postsList: posts.posts,
+  updateFlag: posts.updateChangeFlag,
   users: users.users,
   userError: users.error,
   userLoading: users.loading,
@@ -46,6 +48,8 @@ const mapStateToProps = ({ comments, users }: RootState) => ({
 const mapDispatchToProps = {
   getCommentsList: ({ postId }: { postId: number }) => getCommentsAction({ postId }),
   getUserDetails: ({ userId }: { userId: number }) => getUserInfoAction({ userId }),
+  markAsFavorite: ({ postId, isFavorite }: { postId: number; isFavorite: boolean }) =>
+    markPostAsFavoriteAction({ postId, isFavorite }),
 };
 
 const connector = connect(mapStateToProps, mapDispatchToProps);
@@ -55,12 +59,13 @@ type PostDetailsScreenNavigationProp = StackNavigationProp<MainStackParamList, '
 type PropsFromRedux = ConnectedProps<typeof connector>;
 type Props = PropsFromRedux & {
   navigation: PostDetailsScreenNavigationProp;
-  post: Post;
+  post: PostEnhanced;
 };
 
 type PickedUserInfo = Pick<User, 'id' | 'name' | 'email' | 'phone' | 'website'>;
 
 type State = {
+  currentPost: PostEnhanced;
   user: PickedUserInfo;
 };
 
@@ -68,6 +73,14 @@ type State = {
 
 class PostDetails extends Component<Props, State> {
   state = {
+    currentPost: {
+      userId: 0,
+      id: 0,
+      title: '',
+      body: '',
+      isFavorite: false,
+      isRead: false,
+    },
     user: {
       id: 0,
       name: '',
@@ -78,13 +91,35 @@ class PostDetails extends Component<Props, State> {
   };
 
   componentDidMount() {
-    const { navigation } = this.props;
+    const { navigation, post } = this.props;
     navigation.setOptions({
-      headerRight: () => <FavoriteButton onPress={() => Alert.alert('Hello!')} />,
+      headerRight: () => (
+        <FavoriteButton filled={post.isFavorite} onPress={this.markPostAsFavorite} />
+      ),
     });
+    this.setPostInfo();
     this.getComments();
     this.getUserInfo();
   }
+
+  componentDidUpdate(prevProps: Props) {
+    const { navigation, post, postsList: currentPostsList } = this.props;
+    const thisPost = currentPostsList.find((postItem) => postItem.id === post.id);
+
+    const { updateFlag } = this.props;
+    if (prevProps.updateFlag !== updateFlag && thisPost) {
+      navigation.setOptions({
+        headerRight: () => (
+          <FavoriteButton filled={thisPost.isFavorite} onPress={this.markPostAsFavorite} />
+        ),
+      });
+    }
+  }
+
+  setPostInfo = () => {
+    const { post } = this.props;
+    this.setState({ currentPost: post });
+  };
 
   getComments = () => {
     const { getCommentsList, post } = this.props;
@@ -98,6 +133,15 @@ class PostDetails extends Component<Props, State> {
       this.setState({ user: foundUser });
     } else {
       getUserDetails({ userId: post.userId });
+    }
+  };
+
+  markPostAsFavorite = () => {
+    const { markAsFavorite, post, postsList: currentPostsList } = this.props;
+
+    const thisPost = currentPostsList.find((postItem) => postItem.id === post.id);
+    if (thisPost) {
+      markAsFavorite({ postId: post.id, isFavorite: !thisPost.isFavorite });
     }
   };
 

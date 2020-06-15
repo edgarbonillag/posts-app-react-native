@@ -11,12 +11,14 @@ export interface PostsState {
   error: string;
   loading: boolean;
   posts: PostEnhanced[];
+  updateChangeFlag: boolean;
 }
 
 const initialState: PostsState = {
   error: '',
   loading: false,
   posts: [],
+  updateChangeFlag: false,
 };
 
 const posts = (state = initialState, action: PostsActionTypes): PostsState => {
@@ -27,10 +29,10 @@ const posts = (state = initialState, action: PostsActionTypes): PostsState => {
         loading: action.payload.loading,
       };
     case GET_POSTS:
-      const { posts } = action.payload;
+      const { posts: incomingPosts } = action.payload;
       let enhancedPosts: PostEnhanced[] = [];
-      if (posts) {
-        enhancedPosts = posts.map((post, index) => ({
+      if (incomingPosts) {
+        enhancedPosts = incomingPosts.map((post, index) => ({
           ...post,
           isFavorite: false,
           isRead: index > 19,
@@ -44,12 +46,18 @@ const posts = (state = initialState, action: PostsActionTypes): PostsState => {
       const { isFavorite, postId } = action.payload;
       const indexOfPost = state.posts.findIndex((post) => post.id === postId);
       state.posts[indexOfPost].isFavorite = isFavorite;
-      return state;
+      return {
+        ...state,
+        updateChangeFlag: !state.updateChangeFlag,
+      };
     case MARK_POST_AS_READ:
       const { isRead, postId: postIdentifier } = action.payload;
       const indexOfReadPost = state.posts.findIndex((post) => post.id === postIdentifier);
       state.posts[indexOfReadPost].isRead = isRead;
-      return state;
+      return {
+        ...state,
+        updateChangeFlag: !state.updateChangeFlag,
+      };
     default:
       return state;
   }

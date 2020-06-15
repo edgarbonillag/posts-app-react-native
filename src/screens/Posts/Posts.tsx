@@ -24,6 +24,7 @@ const mapStateToProps = ({ posts }: RootState) => ({
   error: posts.error,
   loading: posts.loading,
   posts: posts.posts,
+  updateFlag: posts.updateChangeFlag,
 });
 
 const mapDispatchToProps = {
@@ -62,7 +63,6 @@ class Posts extends Component<Props> {
     navigation.navigate('PostDetails', { post });
     if (!post.isRead) {
       markPostAsRead({ postId: post.id });
-      this.forceUpdate();
     }
   };
 
