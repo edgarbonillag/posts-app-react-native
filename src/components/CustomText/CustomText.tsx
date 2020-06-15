@@ -13,29 +13,34 @@ interface Props {
 }
 
 const CustomText = ({ children, variant }: Props) => {
+  let bold: boolean;
   let color: string;
   let size: number;
 
   switch (variant) {
     case 'error':
+      bold = false;
       color = textColors.error;
       size = 16;
       break;
     case 'subtitle':
+      bold = isIos;
       color = isIos ? textColors.veryDarkGray : textColors.mainGray;
       size = 16;
       break;
     case 'title':
+      bold = true;
       color = textColors.veryDarkGray;
-      size = 20;
+      size = 24;
       break;
     default:
+      bold = false;
       color = textColors.mainGray;
       size = 16;
   }
 
   return (
-    <StyledText allowFontScaling={false} color={color} size={size}>
+    <StyledText allowFontScaling={false} bold={bold} color={color} size={size}>
       {children}
     </StyledText>
   );

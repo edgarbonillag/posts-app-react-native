@@ -10,7 +10,7 @@ import { MainStackParamList } from '../../navigation/MainStack';
 import { CustomText, PostListItem, RefreshButton } from '../../components';
 
 // STYLED
-import { MainContainer, styles } from './styled';
+import { MainContainer, SeparatorLine, styles } from './styled';
 import { themeColors } from '../../theme/colors';
 
 // REDUX
@@ -58,7 +58,7 @@ class Posts extends Component<Props> {
     return (
       <PostListItem
         isFavorite={false}
-        isRead={index < 21}
+        isRead={index > 21}
         onPress={() => navigation.navigate('PostDetails', { post: item })}
         text={item.title}
       />
@@ -70,15 +70,17 @@ class Posts extends Component<Props> {
     return (
       <MainContainer>
         <StatusBar barStyle="light-content" backgroundColor={themeColors.darkMainGreen} />
-        {!!error && <CustomText variant="error">{error}</CustomText>}
+        {!!error && !loading ? <CustomText variant="error">{error}</CustomText> : null}
         {loading ? (
           <ActivityIndicator color={themeColors.mainGreen} size="large" />
         ) : (
           <FlatList
             data={posts}
+            ItemSeparatorComponent={() => <SeparatorLine />}
             keyExtractor={(item) => `${item.id}`}
             renderItem={this.renderListItems}
             style={styles.postsFlatlist}
+            ListFooterComponent={() => <SeparatorLine />}
           />
         )}
       </MainContainer>

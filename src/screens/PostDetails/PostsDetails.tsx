@@ -8,10 +8,19 @@ import { withMappedNavigationParams } from 'react-navigation-props-mapper';
 import { MainStackParamList } from '../../navigation/MainStack';
 
 // COMPONENTS
-import { CustomText, FavoriteButton } from '../../components';
+import { CustomText, FavoriteButton, UserInfo } from '../../components';
 
 // STYLED
-import { MainContainer } from './styled';
+import {
+  CommentContainer,
+  CommentsTitle,
+  LoadingContainer,
+  MainContainer,
+  SectionWrapper,
+  SeparatorLine,
+  ScrollContainer,
+  VerticalSpace,
+} from './styled';
 import { themeColors } from '../../theme/colors';
 
 // REDUX
@@ -19,7 +28,7 @@ import { compose } from 'redux';
 import { connect, ConnectedProps } from 'react-redux';
 import { RootState } from '../../store';
 import { getCommentsOfAPost as getCommentsAction } from '../../store/actions';
-import { Post } from 'src/types';
+import { Comment, Post } from '../../types';
 import { FlatList } from 'react-native-gesture-handler';
 
 const mapStateToProps = ({ comments }: RootState) => ({
@@ -58,22 +67,52 @@ class PostDetails extends Component<Props> {
     getCommentsList({ postId: post.id });
   };
 
+  renderFlatlistItem = ({ item }: { item: Comment }) => (
+    <CommentContainer>
+      <CustomText>{item.body}</CustomText>
+    </CommentContainer>
+  );
+
   render() {
-    const { error, loading, comments } = this.props;
-    // console.log('error', error, 'loading', loading, 'comments', comments);
+    const { comments, error, loading, post } = this.props;
 
     return (
       <MainContainer>
         <StatusBar barStyle="light-content" backgroundColor={themeColors.darkMainGreen} />
-        {!!error && <CustomText variant="error">{error}</CustomText>}
+        {!!error && !loading ? <CustomText variant="error">{error}</CustomText> : null}
         {loading ? (
-          <ActivityIndicator color={themeColors.mainGreen} size="large" />
+          <LoadingContainer>
+            <ActivityIndicator color={themeColors.mainGreen} size="large" />
+          </LoadingContainer>
         ) : (
-          <FlatList
-            data={comments}
-            keyExtractor={(item) => `${item.id}`}
-            renderItem={({ item }) => <CustomText>{item.body}</CustomText>}
-          />
+          <ScrollContainer nestedScrollEnabled={false}>
+            <VerticalSpace />
+            <SectionWrapper>
+              <CustomText variant="title">Description</CustomText>
+            </SectionWrapper>
+            <SectionWrapper>
+              <CustomText>{post.body}</CustomText>
+            </SectionWrapper>
+            <SectionWrapper>
+              <UserInfo
+                name="John Doe"
+                email="johndoe@gmail.com"
+                phone="1234567890"
+                website="www.johndoe.com"
+              />
+            </SectionWrapper>
+            <CommentsTitle>
+              <CustomText variant="subtitle">COMMENTS</CustomText>
+            </CommentsTitle>
+            <FlatList
+              data={comments}
+              ItemSeparatorComponent={() => <SeparatorLine />}
+              keyExtractor={(item) => `${item.id}`}
+              ListFooterComponent={() => <SeparatorLine />}
+              renderItem={this.renderFlatlistItem}
+              scrollEnabled={false}
+            />
+          </ScrollContainer>
         )}
       </MainContainer>
     );

@@ -13,7 +13,7 @@ const themeColors = {
 const textColors = {
   error: '#d0021a',
   mainGray: '#777777',
-  veryDarkGray: '#252525',
+  veryDarkGray: '#444444',
 };
 
 export { textColors, themeColors };

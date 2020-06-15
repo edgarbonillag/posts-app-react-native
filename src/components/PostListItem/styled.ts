@@ -25,8 +25,6 @@ export const IconContainer = styled(View)({
 export const MainContainer = styled(TouchableOpacity)({
   alignItems: 'center',
   backgroundColor: isIos ? themeColors.white : themeColors.veryLightGray,
-  borderBottomWidth: 1,
-  borderBottomColor: themeColors.lightGray,
   flexDirection: 'row',
   paddingHorizontal: 5,
   paddingBottom: 10,

@@ -1,13 +1,56 @@
 // REACT NATIVE
-import { SafeAreaView } from 'react-native';
+import { SafeAreaView, ScrollView, View } from 'react-native';
 
 // STYLING
 import styled from 'styled-components/native';
 import { themeColors } from '../../theme/colors';
 
-export const MainContainer = styled(SafeAreaView)({
+// UTILS
+import { isIos } from '../../utils/platform';
+
+export const CommentContainer = styled(View)({
+  justifyContent: 'center',
+  paddingHorizontal: 15,
+  paddingBottom: 10,
+  paddingTop: isIos ? 10 : 20,
+  width: '100%',
+});
+
+export const CommentsTitle = styled(View)({
+  backgroundColor: themeColors.lightGray,
+  paddingHorizontal: 15,
+  paddingVertical: 5,
+  width: '100%',
+});
+
+export const LoadingContainer = styled(View)({
   alignItems: 'center',
-  backgroundColor: themeColors.veryLightGray,
   flex: 1,
   justifyContent: 'center',
+});
+
+export const MainContainer = styled(SafeAreaView)({
+  backgroundColor: themeColors.veryLightGray,
+  flex: 1,
+});
+
+export const ScrollContainer = styled(ScrollView)({
+  flex: 1,
+});
+
+export const SectionWrapper = styled(View)({
+  justifyContent: 'center',
+  paddingHorizontal: 15,
+  paddingBottom: 15,
+});
+
+export const SeparatorLine = styled(View)({
+  backgroundColor: themeColors.lightGray,
+  height: 1,
+  marginLeft: isIos ? 15 : 0,
+  width: '100%',
+});
+
+export const VerticalSpace = styled(View)({
+  height: 15,
 });
