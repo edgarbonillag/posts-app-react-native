@@ -17,7 +17,7 @@ export const CommentContainer = styled(View)({
 });
 
 export const CommentsTitle = styled(View)({
-  backgroundColor: themeColors.lightGray,
+  backgroundColor: isIos ? themeColors.lightGray : themeColors.mediumLightGray,
   paddingHorizontal: 15,
   paddingVertical: 5,
   width: '100%',

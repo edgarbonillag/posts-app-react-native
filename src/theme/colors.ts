@@ -5,6 +5,7 @@ const themeColors = {
   lightGray: '#cccccc',
   mainGreen: '#08af2c',
   mediumGray: '#aaaaaa',
+  mediumLightGray: '#dddddd',
   ripeLemon: '#f8e61c',
   veryLightGray: '#f8f8f8',
   white: '#ffffff',

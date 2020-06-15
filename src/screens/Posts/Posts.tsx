@@ -1,6 +1,6 @@
 // REACT & REACT NATIVE
 import React, { Component } from 'react';
-import { ActivityIndicator, Alert, FlatList, StatusBar } from 'react-native';
+import { ActivityIndicator, FlatList, StatusBar } from 'react-native';
 
 // NAVIGATION
 import { StackNavigationProp } from '@react-navigation/stack';
@@ -43,7 +43,7 @@ class Posts extends Component<Props> {
   componentDidMount() {
     const { navigation } = this.props;
     navigation.setOptions({
-      headerRight: () => <RefreshButton onPress={() => Alert.alert('Hello!')} />,
+      headerRight: () => <RefreshButton onPress={this.getPosts} />,
     });
     this.getPosts();
   }
