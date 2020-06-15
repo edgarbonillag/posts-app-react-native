@@ -5,13 +5,15 @@ import { GET_USER_INFO, SET_LOADING_USER_INFO, UsersActionTypes } from './types'
 // SERVICES
 import { getUserInfoService } from '../../services';
 
+// MAIN CODE
+
 export const getUserDetails = ({ userId }: { userId: number }) => {
   return async (dispatch: Dispatch<UsersActionTypes>) => {
     try {
       dispatch({ type: SET_LOADING_USER_INFO, payload: { loading: true } });
       const { success, error, payload } = await getUserInfoService({ userId });
       if (success) {
-        dispatch({ type: GET_USER_INFO, error: true, payload: { user: payload } });
+        dispatch({ type: GET_USER_INFO, error: false, payload: { user: payload } });
       } else {
         dispatch({ type: GET_USER_INFO, error: true, payload: { error } });
       }

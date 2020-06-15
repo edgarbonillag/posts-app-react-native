@@ -21,6 +21,12 @@ const users = (state = initialState, action: UsersActionTypes): UsersState => {
         loading: action.payload.loading,
       };
     case GET_USER_INFO:
+      if (action.error) {
+        return {
+          ...state,
+          error: action.payload.error || '',
+        };
+      }
       return {
         ...state,
         users: action.payload.user ? [...state.users, action.payload.user] : state.users,

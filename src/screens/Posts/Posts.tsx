@@ -30,6 +30,7 @@ import { isIos } from '../../utils/platform';
 // REDUX
 import { connect, ConnectedProps } from 'react-redux';
 import {
+  deleteAllPosts as deleteAllPostsAction,
   getPosts as getPostsAction,
   markPostAsRead as markPostAsReadAction,
 } from '../../store/actions';
@@ -42,6 +43,7 @@ const mapStateToProps = ({ posts }: RootState) => ({
 });
 
 const mapDispatchToProps = {
+  deletePosts: () => deleteAllPostsAction(),
   getPostsList: () => getPostsAction(),
   markPostAsRead: ({ postId }: { postId: number }) => markPostAsReadAction({ postId }),
 };
@@ -80,6 +82,11 @@ class Posts extends Component<Props> {
     }
   };
 
+  deleteAllPosts = () => {
+    const { deletePosts } = this.props;
+    deletePosts();
+  };
+
   renderListItems = ({ item }: { item: PostEnhanced }) => {
     return (
       <PostListItem
@@ -91,35 +98,56 @@ class Posts extends Component<Props> {
     );
   };
 
-  render() {
+  MainContent = () => {
     const { error, loading, posts } = this.props;
+
+    if (loading) {
+      return (
+        <LoadingContainer>
+          <ActivityIndicator color={themeColors.mainGreen} size="large" />
+        </LoadingContainer>
+      );
+    }
+
+    if (error) {
+      return (
+        <LoadingContainer>
+          <CustomText variant="error">Error: Unable to get Posts from database</CustomText>
+        </LoadingContainer>
+      );
+    }
+
+    if (posts.length === 0) {
+      return (
+        <LoadingContainer>
+          <CustomText>The Posts list is empty</CustomText>
+        </LoadingContainer>
+      );
+    }
+
+    return (
+      <FlatList
+        data={posts}
+        ItemSeparatorComponent={() => <SeparatorLine />}
+        keyExtractor={(item) => `${item.id}`}
+        renderItem={this.renderListItems}
+        style={styles.postsFlatlist}
+        ListFooterComponent={() => <SeparatorLine />}
+      />
+    );
+  };
+
+  render() {
     return (
       <MainContainer>
         <StatusBar barStyle="light-content" backgroundColor={themeColors.darkMainGreen} />
-        {loading ? (
-          <LoadingContainer>
-            <ActivityIndicator color={themeColors.mainGreen} size="large" />
-          </LoadingContainer>
-        ) : error ? (
-          <LoadingContainer>
-            <CustomText variant="error">Error: Unable to get Posts from database</CustomText>
-          </LoadingContainer>
-        ) : (
-          <FlatList
-            data={posts}
-            ItemSeparatorComponent={() => <SeparatorLine />}
-            keyExtractor={(item) => `${item.id}`}
-            renderItem={this.renderListItems}
-            style={styles.postsFlatlist}
-            ListFooterComponent={() => <SeparatorLine />}
-          />
-        )}
+        <this.MainContent />
         {isIos ? (
-          <DeleteButton>
+          <DeleteButton onPress={this.deleteAllPosts}>
             <DeleteText>Delete All</DeleteText>
           </DeleteButton>
         ) : (
-          <FloatingDeleteButton style={styles.deleteButtonElevation}>
+          <FloatingDeleteButton onPress={this.deleteAllPosts} style={styles.deleteButtonElevation}>
             <Icon name="md-trash" size={25} color={themeColors.white} />
           </FloatingDeleteButton>
         )}

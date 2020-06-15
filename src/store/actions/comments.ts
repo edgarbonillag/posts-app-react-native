@@ -5,13 +5,15 @@ import { GET_COMMENTS, SET_LOADING_COMMENTS, CommentsActionTypes } from './types
 // SERVICES
 import { getCommentsService } from '../../services';
 
+// MAIN CODE
+
 export const getCommentsOfAPost = ({ postId }: { postId: number }) => {
   return async (dispatch: Dispatch<CommentsActionTypes>) => {
     try {
       dispatch({ type: SET_LOADING_COMMENTS, payload: { loading: true } });
       const { success, error, payload } = await getCommentsService({ postId });
       if (success) {
-        dispatch({ type: GET_COMMENTS, error: true, payload: { comments: payload } });
+        dispatch({ type: GET_COMMENTS, error: false, payload: { comments: payload } });
       } else {
         dispatch({ type: GET_COMMENTS, error: true, payload: { error } });
       }

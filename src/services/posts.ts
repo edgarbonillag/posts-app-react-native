@@ -20,7 +20,7 @@ export const getPostsService = async (): Promise<PostsServiceResponse> => {
     if (response.status === 200) {
       serviceResponse = { success: true, payload: parsedResponse, error: '' };
     } else {
-      serviceResponse = { success: false, payload: [], error: parsedResponse.error };
+      serviceResponse = { success: false, payload: [], error: 'An unknown error occurred.' };
     }
     return serviceResponse;
   } catch (err) {

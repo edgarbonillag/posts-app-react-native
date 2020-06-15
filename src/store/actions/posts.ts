@@ -1,6 +1,7 @@
 // REDUX
 import { Dispatch } from 'redux';
 import {
+  DELETE_ALL_POSTS,
   GET_POSTS,
   SET_LOADING_POSTS,
   MARK_POST_AS_FAVORITE,
@@ -13,13 +14,19 @@ import { getPostsService } from '../../services';
 
 // MAIN CODE
 
+export const deleteAllPosts = () => {
+  return (dispatch: Dispatch<PostsActionTypes>) => {
+    dispatch({ type: DELETE_ALL_POSTS });
+  };
+};
+
 export const getPosts = () => {
   return async (dispatch: Dispatch<PostsActionTypes>) => {
     try {
       dispatch({ type: SET_LOADING_POSTS, payload: { loading: true } });
       const { success, error, payload } = await getPostsService();
       if (success) {
-        dispatch({ type: GET_POSTS, error: true, payload: { posts: payload } });
+        dispatch({ type: GET_POSTS, error: false, payload: { posts: payload } });
       } else {
         dispatch({ type: GET_POSTS, error: true, payload: { error } });
       }

@@ -4,6 +4,7 @@ import {
   MARK_POST_AS_FAVORITE,
   MARK_POST_AS_READ,
   PostsActionTypes,
+  DELETE_ALL_POSTS,
 } from '../actions/types';
 import { PostEnhanced } from '../../types';
 
@@ -29,6 +30,12 @@ const posts = (state = initialState, action: PostsActionTypes): PostsState => {
         loading: action.payload.loading,
       };
     case GET_POSTS:
+      if (action.error) {
+        return {
+          ...state,
+          error: action.payload.error || '',
+        };
+      }
       const { posts: incomingPosts } = action.payload;
       let enhancedPosts: PostEnhanced[] = [];
       if (incomingPosts) {
@@ -57,6 +64,11 @@ const posts = (state = initialState, action: PostsActionTypes): PostsState => {
       return {
         ...state,
         updateChangeFlag: !state.updateChangeFlag,
+      };
+    case DELETE_ALL_POSTS:
+      return {
+        ...state,
+        posts: [],
       };
     default:
       return state;

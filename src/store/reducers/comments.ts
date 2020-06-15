@@ -21,6 +21,12 @@ const comments = (state = initialState, action: CommentsActionTypes): PostsState
         loading: action.payload.loading,
       };
     case GET_COMMENTS:
+      if (action.error) {
+        return {
+          ...state,
+          error: action.payload.error || '',
+        };
+      }
       return {
         ...state,
         comments: action.payload.comments || [],
