@@ -6,12 +6,26 @@ import { ActivityIndicator, FlatList, StatusBar } from 'react-native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { MainStackParamList } from '../../navigation/MainStack';
 
+// RESOURCES
+import Icon from 'react-native-vector-icons/Ionicons';
+
 // COMPONENTS
 import { CustomText, PostListItem, RefreshButton } from '../../components';
 
 // STYLED
-import { MainContainer, SeparatorLine, styles } from './styled';
+import {
+  DeleteButton,
+  DeleteText,
+  FloatingDeleteButton,
+  LoadingContainer,
+  MainContainer,
+  SeparatorLine,
+  styles,
+} from './styled';
 import { themeColors } from '../../theme/colors';
+
+// UTILS
+import { isIos } from '../../utils/platform';
 
 // REDUX
 import { connect, ConnectedProps } from 'react-redux';
@@ -83,9 +97,13 @@ class Posts extends Component<Props> {
       <MainContainer>
         <StatusBar barStyle="light-content" backgroundColor={themeColors.darkMainGreen} />
         {loading ? (
-          <ActivityIndicator color={themeColors.mainGreen} size="large" />
+          <LoadingContainer>
+            <ActivityIndicator color={themeColors.mainGreen} size="large" />
+          </LoadingContainer>
         ) : error ? (
-          <CustomText variant="error">Error: Unable to get Posts from database</CustomText>
+          <LoadingContainer>
+            <CustomText variant="error">Error: Unable to get Posts from database</CustomText>
+          </LoadingContainer>
         ) : (
           <FlatList
             data={posts}
@@ -95,6 +113,15 @@ class Posts extends Component<Props> {
             style={styles.postsFlatlist}
             ListFooterComponent={() => <SeparatorLine />}
           />
+        )}
+        {isIos ? (
+          <DeleteButton>
+            <DeleteText>Delete All</DeleteText>
+          </DeleteButton>
+        ) : (
+          <FloatingDeleteButton style={styles.deleteButtonElevation}>
+            <Icon name="md-trash" size={25} color={themeColors.white} />
+          </FloatingDeleteButton>
         )}
       </MainContainer>
     );

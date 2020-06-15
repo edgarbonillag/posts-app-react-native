@@ -65,7 +65,6 @@ type Props = PropsFromRedux & {
 type PickedUserInfo = Pick<User, 'id' | 'name' | 'email' | 'phone' | 'website'>;
 
 type State = {
-  currentPost: PostEnhanced;
   user: PickedUserInfo;
 };
 
@@ -73,14 +72,6 @@ type State = {
 
 class PostDetails extends Component<Props, State> {
   state = {
-    currentPost: {
-      userId: 0,
-      id: 0,
-      title: '',
-      body: '',
-      isFavorite: false,
-      isRead: false,
-    },
     user: {
       id: 0,
       name: '',
@@ -97,7 +88,6 @@ class PostDetails extends Component<Props, State> {
         <FavoriteButton filled={post.isFavorite} onPress={this.markPostAsFavorite} />
       ),
     });
-    this.setPostInfo();
     this.getComments();
     this.getUserInfo();
   }
@@ -115,11 +105,6 @@ class PostDetails extends Component<Props, State> {
       });
     }
   }
-
-  setPostInfo = () => {
-    const { post } = this.props;
-    this.setState({ currentPost: post });
-  };
 
   getComments = () => {
     const { getCommentsList, post } = this.props;
