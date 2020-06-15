@@ -10,6 +10,13 @@ export const InfoItem = styled(View)({
   paddingVertical: 10,
 });
 
+export const LoadingContainer = styled(View)({
+  alignItems: 'center',
+  height: 160,
+  justifyContent: 'center',
+  width: '100%',
+});
+
 export const MainContainer = styled(View)({
   paddingVertical: 10,
   width: '100%',

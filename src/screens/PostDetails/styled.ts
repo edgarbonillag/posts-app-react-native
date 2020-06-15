@@ -16,17 +16,18 @@ export const CommentContainer = styled(View)({
   width: '100%',
 });
 
+export const CommentsLoadingContainer = styled(View)({
+  alignItems: 'center',
+  height: 160,
+  justifyContent: 'center',
+  width: '100%',
+});
+
 export const CommentsTitle = styled(View)({
   backgroundColor: isIos ? themeColors.lightGray : themeColors.mediumLightGray,
   paddingHorizontal: 15,
   paddingVertical: 5,
   width: '100%',
-});
-
-export const LoadingContainer = styled(View)({
-  alignItems: 'center',
-  flex: 1,
-  justifyContent: 'center',
 });
 
 export const MainContainer = styled(SafeAreaView)({

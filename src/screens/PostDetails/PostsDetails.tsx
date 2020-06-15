@@ -13,8 +13,8 @@ import { CustomText, FavoriteButton, UserInfo } from '../../components';
 // STYLED
 import {
   CommentContainer,
+  CommentsLoadingContainer,
   CommentsTitle,
-  LoadingContainer,
   MainContainer,
   SectionWrapper,
   SeparatorLine,
@@ -27,18 +27,25 @@ import { themeColors } from '../../theme/colors';
 import { compose } from 'redux';
 import { connect, ConnectedProps } from 'react-redux';
 import { RootState } from '../../store';
-import { getCommentsOfAPost as getCommentsAction } from '../../store/actions';
-import { Comment, Post } from '../../types';
+import {
+  getCommentsOfAPost as getCommentsAction,
+  getUserDetails as getUserInfoAction,
+} from '../../store/actions';
+import { Comment, Post, User } from '../../types';
 import { FlatList } from 'react-native-gesture-handler';
 
-const mapStateToProps = ({ comments }: RootState) => ({
-  error: comments.error,
-  loading: comments.loading,
+const mapStateToProps = ({ comments, users }: RootState) => ({
   comments: comments.comments,
+  commentsError: comments.error,
+  commentsLoading: comments.loading,
+  users: users.users,
+  userError: users.error,
+  userLoading: users.loading,
 });
 
 const mapDispatchToProps = {
   getCommentsList: ({ postId }: { postId: number }) => getCommentsAction({ postId }),
+  getUserDetails: ({ userId }: { userId: number }) => getUserInfoAction({ userId }),
 };
 
 const connector = connect(mapStateToProps, mapDispatchToProps);
@@ -51,20 +58,47 @@ type Props = PropsFromRedux & {
   post: Post;
 };
 
+type PickedUserInfo = Pick<User, 'id' | 'name' | 'email' | 'phone' | 'website'>;
+
+type State = {
+  user: PickedUserInfo;
+};
+
 // MAIN CODE
 
-class PostDetails extends Component<Props> {
+class PostDetails extends Component<Props, State> {
+  state = {
+    user: {
+      id: 0,
+      name: '',
+      email: '',
+      phone: '',
+      website: '',
+    },
+  };
+
   componentDidMount() {
     const { navigation } = this.props;
     navigation.setOptions({
       headerRight: () => <FavoriteButton onPress={() => Alert.alert('Hello!')} />,
     });
     this.getComments();
+    this.getUserInfo();
   }
 
   getComments = () => {
     const { getCommentsList, post } = this.props;
     getCommentsList({ postId: post.id });
+  };
+
+  getUserInfo = () => {
+    const { getUserDetails, post, users } = this.props;
+    const foundUser = users.find((user) => user.id === post.userId);
+    if (foundUser) {
+      this.setState({ user: foundUser });
+    } else {
+      getUserDetails({ userId: post.userId });
+    }
   };
 
   renderFlatlistItem = ({ item }: { item: Comment }) => (
@@ -73,47 +107,85 @@ class PostDetails extends Component<Props> {
     </CommentContainer>
   );
 
+  renderSeparatorComponent = () => <SeparatorLine />;
+
   render() {
-    const { comments, error, loading, post } = this.props;
+    const {
+      comments,
+      commentsError,
+      commentsLoading,
+      post,
+      users,
+      userError,
+      userLoading,
+    } = this.props;
+
+    let userInfo: PickedUserInfo = {
+      id: 0,
+      name: '',
+      email: '',
+      phone: '',
+      website: '',
+    };
+    const foundUser = users.find((user) => user.id === post.userId);
+    if (!userLoading) {
+      if (foundUser) {
+        const { id, name, email, phone, website } = foundUser;
+        userInfo = { id, name, email, phone, website };
+      } else if (!userError) {
+        this.getUserInfo();
+      }
+    }
+    /*
+      {!!error && !loadingComments ? <CustomText variant="error">{error}</CustomText> : null}
+      <LoadingContainer>
+        <ActivityIndicator color={themeColors.mainGreen} size="large" />
+      </LoadingContainer>
+    */
 
     return (
       <MainContainer>
         <StatusBar barStyle="light-content" backgroundColor={themeColors.darkMainGreen} />
-        {!!error && !loading ? <CustomText variant="error">{error}</CustomText> : null}
-        {loading ? (
-          <LoadingContainer>
-            <ActivityIndicator color={themeColors.mainGreen} size="large" />
-          </LoadingContainer>
-        ) : (
-          <ScrollContainer nestedScrollEnabled={false}>
-            <VerticalSpace />
-            <SectionWrapper>
-              <CustomText variant="title">Description</CustomText>
-            </SectionWrapper>
-            <SectionWrapper>
-              <CustomText>{post.body}</CustomText>
-            </SectionWrapper>
-            <SectionWrapper>
-              <UserInfo
-                name="John Doe"
-                email="johndoe@gmail.com"
-                phone="1234567890"
-                website="www.johndoe.com"
-              />
-            </SectionWrapper>
-            <CommentsTitle>
-              <CustomText variant="subtitle">COMMENTS</CustomText>
-            </CommentsTitle>
+        <ScrollContainer nestedScrollEnabled={false}>
+          <VerticalSpace />
+          <SectionWrapper>
+            <CustomText variant="title">Description</CustomText>
+          </SectionWrapper>
+          <SectionWrapper>
+            <CustomText>{post.body}</CustomText>
+          </SectionWrapper>
+          <SectionWrapper>
+            <UserInfo
+              loading={userLoading}
+              error={!!userError}
+              name={userInfo.name}
+              email={userInfo.email}
+              phone={userInfo.phone}
+              website={userInfo.website}
+            />
+          </SectionWrapper>
+          <CommentsTitle>
+            <CustomText variant="subtitle">COMMENTS</CustomText>
+          </CommentsTitle>
+          {commentsLoading ? (
+            <CommentsLoadingContainer>
+              <ActivityIndicator color={themeColors.mainGreen} size="large" />
+            </CommentsLoadingContainer>
+          ) : commentsError ? (
+            <CommentsLoadingContainer>
+              <CustomText variant="error">Error: Unable to get Comments</CustomText>
+            </CommentsLoadingContainer>
+          ) : (
             <FlatList
               data={comments}
-              ItemSeparatorComponent={() => <SeparatorLine />}
+              ItemSeparatorComponent={this.renderSeparatorComponent}
               keyExtractor={(item) => `${item.id}`}
-              ListFooterComponent={() => <SeparatorLine />}
+              ListFooterComponent={this.renderSeparatorComponent}
               renderItem={this.renderFlatlistItem}
               scrollEnabled={false}
             />
-          </ScrollContainer>
-        )}
+          )}
+        </ScrollContainer>
       </MainContainer>
     );
   }

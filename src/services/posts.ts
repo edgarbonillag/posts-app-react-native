@@ -2,7 +2,7 @@
 import { postsEndpoint } from './endpoints';
 
 // TYPES
-import { Post } from 'src/types';
+import { Post } from '../types';
 
 interface PostsServiceResponse {
   success: boolean;

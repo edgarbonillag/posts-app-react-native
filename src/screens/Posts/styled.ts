@@ -4,6 +4,8 @@ import { SafeAreaView, StyleSheet, View } from 'react-native';
 // STYLING
 import styled from 'styled-components/native';
 import { themeColors } from '../../theme/colors';
+
+// UTILS
 import { isIos } from '../../utils/platform';
 
 export const MainContainer = styled(SafeAreaView)({

@@ -1,27 +1,4 @@
-// POSTS
-
-import { Comment, Post } from '../../types';
-
-export const GET_POSTS = 'SAVE_POSTS';
-export const SET_LOADING_POSTS = 'SET_LOADING_POSTS';
-
-interface GetPostsAction {
-  type: typeof GET_POSTS;
-  payload: {
-    posts?: Post[];
-    error?: string;
-  };
-  error: boolean;
-}
-
-interface SetLoadingPostsAction {
-  type: typeof SET_LOADING_POSTS;
-  payload: {
-    loading: boolean;
-  };
-}
-
-export type PostsActionTypes = GetPostsAction | SetLoadingPostsAction;
+import { Comment, Post, User } from '../../types';
 
 // COMMENTS
 
@@ -45,3 +22,49 @@ interface SetLoadingCommentsAction {
 }
 
 export type CommentsActionTypes = GetPostDetailsAction | SetLoadingCommentsAction;
+
+// POSTS
+
+export const GET_POSTS = 'GET_POSTS';
+export const SET_LOADING_POSTS = 'SET_LOADING_POSTS';
+
+interface GetPostsAction {
+  type: typeof GET_POSTS;
+  payload: {
+    posts?: Post[];
+    error?: string;
+  };
+  error: boolean;
+}
+
+interface SetLoadingPostsAction {
+  type: typeof SET_LOADING_POSTS;
+  payload: {
+    loading: boolean;
+  };
+}
+
+export type PostsActionTypes = GetPostsAction | SetLoadingPostsAction;
+
+// USERS
+
+export const GET_USER_INFO = 'GET_USER_INFO';
+export const SET_LOADING_USER_INFO = 'SET_LOADING_USER_INFO';
+
+interface GetUserInfoAction {
+  type: typeof GET_USER_INFO;
+  payload: {
+    user?: User;
+    error?: string;
+  };
+  error: boolean;
+}
+
+interface SetLoadingUserInfoAction {
+  type: typeof SET_LOADING_USER_INFO;
+  payload: {
+    loading: boolean;
+  };
+}
+
+export type UsersActionTypes = GetUserInfoAction | SetLoadingUserInfoAction;

@@ -2,7 +2,7 @@
 import { commentsEndpoint } from './endpoints';
 
 // TYPES
-import { Comment } from 'src/types';
+import { Comment } from '../types';
 
 interface CommentsServiceResponse {
   success: boolean;
@@ -28,7 +28,7 @@ export const getCommentsService = async ({
     }
     return serviceResponse;
   } catch (err) {
-    console.log(`Unable to get the Posts from the database: ${err}`);
+    console.log(`Unable to get the Comments from the database: ${err}`);
     return { success: false, payload: [], error: `${err}` };
   }
 };
