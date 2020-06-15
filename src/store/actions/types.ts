@@ -27,7 +27,8 @@ export type CommentsActionTypes = GetPostDetailsAction | SetLoadingCommentsActio
 
 export const GET_POSTS = 'GET_POSTS';
 export const SET_LOADING_POSTS = 'SET_LOADING_POSTS';
-
+export const MARK_POST_AS_FAVORITE = 'MARK_POST_AS_FAVORITE';
+export const MARK_POST_AS_READ = 'MARK_POST_AS_READ';
 interface GetPostsAction {
   type: typeof GET_POSTS;
   payload: {
@@ -44,7 +45,27 @@ interface SetLoadingPostsAction {
   };
 }
 
-export type PostsActionTypes = GetPostsAction | SetLoadingPostsAction;
+interface MarkPostFavoriteAction {
+  type: typeof MARK_POST_AS_FAVORITE;
+  payload: {
+    postId: number;
+    isFavorite: boolean;
+  };
+}
+
+interface MarkPostReadAction {
+  type: typeof MARK_POST_AS_READ;
+  payload: {
+    postId: number;
+    isRead: boolean;
+  };
+}
+
+export type PostsActionTypes =
+  | GetPostsAction
+  | SetLoadingPostsAction
+  | MarkPostFavoriteAction
+  | MarkPostReadAction;
 
 // USERS
 

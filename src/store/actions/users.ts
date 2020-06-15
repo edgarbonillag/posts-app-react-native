@@ -7,7 +7,6 @@ import { getUserInfoService } from '../../services';
 
 export const getUserDetails = ({ userId }: { userId: number }) => {
   return async (dispatch: Dispatch<UsersActionTypes>) => {
-    console.log('userId', userId);
     try {
       dispatch({ type: SET_LOADING_USER_INFO, payload: { loading: true } });
       const { success, error, payload } = await getUserInfoService({ userId });

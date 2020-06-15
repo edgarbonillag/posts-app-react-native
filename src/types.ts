@@ -13,6 +13,11 @@ export interface Post {
   body: string;
 }
 
+export interface PostEnhanced extends Post {
+  isFavorite: boolean;
+  isRead: boolean;
+}
+
 export interface User {
   id: number;
   name: string;

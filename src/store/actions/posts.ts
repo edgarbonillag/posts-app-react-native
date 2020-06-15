@@ -1,9 +1,17 @@
 // REDUX
 import { Dispatch } from 'redux';
-import { GET_POSTS, SET_LOADING_POSTS, PostsActionTypes } from './types';
+import {
+  GET_POSTS,
+  SET_LOADING_POSTS,
+  MARK_POST_AS_FAVORITE,
+  MARK_POST_AS_READ,
+  PostsActionTypes,
+} from './types';
 
 // SERVICES
 import { getPostsService } from '../../services';
+
+// MAIN CODE
 
 export const getPosts = () => {
   return async (dispatch: Dispatch<PostsActionTypes>) => {
@@ -25,5 +33,23 @@ export const getPosts = () => {
       });
       console.log('error on getPosts action', error);
     }
+  };
+};
+
+export const markPostAsFavorite = ({
+  postId,
+  isFavorite,
+}: {
+  postId: number;
+  isFavorite: boolean;
+}) => {
+  return async (dispatch: Dispatch<PostsActionTypes>) => {
+    dispatch({ type: MARK_POST_AS_FAVORITE, payload: { postId, isFavorite } });
+  };
+};
+
+export const markPostAsRead = ({ postId }: { postId: number }) => {
+  return async (dispatch: Dispatch<PostsActionTypes>) => {
+    dispatch({ type: MARK_POST_AS_READ, payload: { postId, isRead: true } });
   };
 };

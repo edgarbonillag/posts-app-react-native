@@ -136,12 +136,6 @@ class PostDetails extends Component<Props, State> {
         this.getUserInfo();
       }
     }
-    /*
-      {!!error && !loadingComments ? <CustomText variant="error">{error}</CustomText> : null}
-      <LoadingContainer>
-        <ActivityIndicator color={themeColors.mainGreen} size="large" />
-      </LoadingContainer>
-    */
 
     return (
       <MainContainer>

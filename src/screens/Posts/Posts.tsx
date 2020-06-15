@@ -15,7 +15,10 @@ import { themeColors } from '../../theme/colors';
 
 // REDUX
 import { connect, ConnectedProps } from 'react-redux';
-import { getPosts as getPostsAction } from '../../store/actions';
+import {
+  getPosts as getPostsAction,
+  markPostAsRead as markPostAsReadAction,
+} from '../../store/actions';
 
 const mapStateToProps = ({ posts }: RootState) => ({
   error: posts.error,
@@ -25,13 +28,14 @@ const mapStateToProps = ({ posts }: RootState) => ({
 
 const mapDispatchToProps = {
   getPostsList: () => getPostsAction(),
+  markPostAsRead: ({ postId }: { postId: number }) => markPostAsReadAction({ postId }),
 };
 
 const connector = connect(mapStateToProps, mapDispatchToProps);
 
 // TYPES
 import { RootState } from '../../store';
-import { Post } from '../../types';
+import { PostEnhanced } from '../../types';
 type PostsScreenNavigationProp = StackNavigationProp<MainStackParamList, 'Posts'>;
 type PropsFromRedux = ConnectedProps<typeof connector>;
 type Props = PropsFromRedux & {
@@ -53,13 +57,21 @@ class Posts extends Component<Props> {
     getPostsList();
   };
 
-  renderListItems = ({ item, index }: { item: Post; index: number }) => {
-    const { navigation } = this.props;
+  onPressPostItem = ({ post }: { post: PostEnhanced }) => {
+    const { markPostAsRead, navigation } = this.props;
+    navigation.navigate('PostDetails', { post });
+    if (!post.isRead) {
+      markPostAsRead({ postId: post.id });
+      this.forceUpdate();
+    }
+  };
+
+  renderListItems = ({ item }: { item: PostEnhanced }) => {
     return (
       <PostListItem
-        isFavorite={false}
-        isRead={index > 21}
-        onPress={() => navigation.navigate('PostDetails', { post: item })}
+        isFavorite={item.isFavorite}
+        isRead={item.isRead}
+        onPress={() => this.onPressPostItem({ post: item })}
         text={item.title}
       />
     );
@@ -70,9 +82,10 @@ class Posts extends Component<Props> {
     return (
       <MainContainer>
         <StatusBar barStyle="light-content" backgroundColor={themeColors.darkMainGreen} />
-        {!!error && !loading ? <CustomText variant="error">{error}</CustomText> : null}
         {loading ? (
           <ActivityIndicator color={themeColors.mainGreen} size="large" />
+        ) : error ? (
+          <CustomText variant="error">Error: Unable to get Posts from database</CustomText>
         ) : (
           <FlatList
             data={posts}

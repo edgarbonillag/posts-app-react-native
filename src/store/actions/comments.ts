@@ -7,7 +7,6 @@ import { getCommentsService } from '../../services';
 
 export const getCommentsOfAPost = ({ postId }: { postId: number }) => {
   return async (dispatch: Dispatch<CommentsActionTypes>) => {
-    console.log('postId', postId);
     try {
       dispatch({ type: SET_LOADING_COMMENTS, payload: { loading: true } });
       const { success, error, payload } = await getCommentsService({ postId });
