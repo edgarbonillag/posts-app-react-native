@@ -1,5 +1,5 @@
 // REACT NATIVE
-import { SafeAreaView, StyleSheet } from 'react-native';
+import { SafeAreaView } from 'react-native';
 
 // STYLING
 import styled from 'styled-components/native';
@@ -10,10 +10,4 @@ export const MainContainer = styled(SafeAreaView)({
   backgroundColor: themeColors.veryLightGray,
   flex: 1,
   justifyContent: 'center',
-});
-
-export const styles = StyleSheet.create({
-  postsFlatlist: {
-    width: '100%',
-  },
 });

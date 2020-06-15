@@ -1,17 +1,17 @@
 // REACT & REACT NATIVE
 import React, { Component } from 'react';
-import { ActivityIndicator, Alert, FlatList, StatusBar, Text } from 'react-native';
+import { ActivityIndicator, Alert, FlatList, StatusBar } from 'react-native';
 
 // NAVIGATION
 import { StackNavigationProp } from '@react-navigation/stack';
 import { MainStackParamList } from '../../navigation/MainStack';
 
 // COMPONENTS
-import { PostListItem, RefreshButton } from '../../components';
+import { CustomText, PostListItem, RefreshButton } from '../../components';
 
 // STYLED
-import { MainContainer } from './styled';
-import { theme } from '../../theme/colors';
+import { MainContainer, styles } from './styled';
+import { themeColors } from '../../theme/colors';
 
 // REDUX
 import { connect, ConnectedProps } from 'react-redux';
@@ -68,21 +68,20 @@ class Posts extends Component<Props> {
   render() {
     const { error, loading, posts } = this.props;
     return (
-      <>
-        <StatusBar barStyle="light-content" backgroundColor={theme.darkMainGreen} />
-        <MainContainer>
-          {!!error && <Text>{error}</Text>}
-          {loading ? (
-            <ActivityIndicator color={theme.mainGreen} size="large" />
-          ) : (
-            <FlatList
-              data={posts}
-              keyExtractor={(item) => `${item.id}`}
-              renderItem={this.renderListItems}
-            />
-          )}
-        </MainContainer>
-      </>
+      <MainContainer>
+        <StatusBar barStyle="light-content" backgroundColor={themeColors.darkMainGreen} />
+        {!!error && <CustomText variant="error">{error}</CustomText>}
+        {loading ? (
+          <ActivityIndicator color={themeColors.mainGreen} size="large" />
+        ) : (
+          <FlatList
+            data={posts}
+            keyExtractor={(item) => `${item.id}`}
+            renderItem={this.renderListItems}
+            style={styles.postsFlatlist}
+          />
+        )}
+      </MainContainer>
     );
   }
 }

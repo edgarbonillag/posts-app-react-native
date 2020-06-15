@@ -1,9 +1,15 @@
 // REACT & REACT NATIVE
 import React from 'react';
-import { Text } from 'react-native';
+
+// RESOURCES
+import Icon from 'react-native-vector-icons/Ionicons';
+
+// COMPONENTS
+import CustomText from '../CustomText';
 
 // STYLED
-import { ArrowContainer, MainContainer } from './styled';
+import { BlueDot, IconContainer, MainContainer, TextContainer } from './styled';
+import { themeColors } from '../../theme/colors';
 
 // UTILS
 import { isIos } from '../../utils/platform';
@@ -18,16 +24,58 @@ interface Props {
 
 // MAIN CODE
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
+const LeftComponent = ({ isFavorite, isRead }: { isFavorite: boolean; isRead: boolean }) => {
+  if (!isRead) {
+    return (
+      <IconContainer>
+        <BlueDot />
+      </IconContainer>
+    );
+  }
+
+  if (isIos) {
+    if (isFavorite) {
+      return (
+        <IconContainer>
+          <Icon name="ios-star" size={25} color={themeColors.ripeLemon} />
+        </IconContainer>
+      );
+    }
+
+    return <IconContainer />;
+  }
+
+  return null;
+};
+
+const RightComponent = ({ isFavorite }: { isFavorite: boolean }) => {
+  if (isIos) {
+    return (
+      <IconContainer>
+        <Icon name="ios-arrow-forward" size={25} color={themeColors.mediumGray} />
+      </IconContainer>
+    );
+  }
+
+  if (isFavorite) {
+    return (
+      <IconContainer>
+        <Icon name="ios-star" size={25} color={themeColors.ripeLemon} />
+      </IconContainer>
+    );
+  }
+
+  return null;
+};
+
 const PostListItem = ({ isFavorite, isRead, onPress, text }: Props) => {
   return (
     <MainContainer onPress={onPress}>
-      <Text>{text}</Text>
-      {isIos && (
-        <ArrowContainer>
-          <Text>{'>'}</Text>
-        </ArrowContainer>
-      )}
+      <LeftComponent isFavorite={isFavorite} isRead={isRead} />
+      <TextContainer>
+        <CustomText>{text}</CustomText>
+      </TextContainer>
+      <RightComponent isFavorite={isFavorite} />
     </MainContainer>
   );
 };

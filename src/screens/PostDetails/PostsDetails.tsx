@@ -1,6 +1,6 @@
 // REACT & REACT NATIVE
 import React, { Component } from 'react';
-import { ActivityIndicator, Alert, SafeAreaView, StatusBar, Text } from 'react-native';
+import { ActivityIndicator, Alert, StatusBar } from 'react-native';
 
 // NAVIGATION
 import { StackNavigationProp } from '@react-navigation/stack';
@@ -8,10 +8,11 @@ import { withMappedNavigationParams } from 'react-navigation-props-mapper';
 import { MainStackParamList } from '../../navigation/MainStack';
 
 // COMPONENTS
-import { FavoriteButton } from '../../components';
+import { CustomText, FavoriteButton } from '../../components';
 
 // STYLED
-import { theme } from '../../theme/colors';
+import { MainContainer } from './styled';
+import { themeColors } from '../../theme/colors';
 
 // REDUX
 import { compose } from 'redux';
@@ -62,21 +63,19 @@ class PostDetails extends Component<Props> {
     // console.log('error', error, 'loading', loading, 'comments', comments);
 
     return (
-      <>
-        <StatusBar barStyle="light-content" backgroundColor={theme.darkMainGreen} />
-        <SafeAreaView>
-          {!!error && <Text>{error}</Text>}
-          {loading ? (
-            <ActivityIndicator color={theme.mainGreen} size="large" />
-          ) : (
-            <FlatList
-              data={comments}
-              keyExtractor={(item) => `${item.id}`}
-              renderItem={({ item }) => <Text>{item.body}</Text>}
-            />
-          )}
-        </SafeAreaView>
-      </>
+      <MainContainer>
+        <StatusBar barStyle="light-content" backgroundColor={themeColors.darkMainGreen} />
+        {!!error && <CustomText variant="error">{error}</CustomText>}
+        {loading ? (
+          <ActivityIndicator color={themeColors.mainGreen} size="large" />
+        ) : (
+          <FlatList
+            data={comments}
+            keyExtractor={(item) => `${item.id}`}
+            renderItem={({ item }) => <CustomText>{item.body}</CustomText>}
+          />
+        )}
+      </MainContainer>
     );
   }
 }
