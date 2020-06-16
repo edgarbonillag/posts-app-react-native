@@ -108,31 +108,31 @@ root
 
 - TypeScript v3.8.3
 
-- `react-native-config`
+- `react-native-config` -
 This library is used to be able to access environmental variables defined in a `.env` file. On real projects, the `.env` is not committed to the repository and is a way to keep data safe, such as API's URLs, services Keys such as Google, Stripe, among other sensitive data.
 
-- `redux` (along with `react-redux` and `redux-thunk`) 
+- `redux` (along with `react-redux` and `redux-thunk`) -
 Used for global state management on the app. Fits perfectly the Flux architechture.
 
-- `styled-components`
+- `styled-components` -
 Nice way to add styles to components and write then in a very intuitive and clean way.
 
-- `react-navigation`
+- `react-navigation` -
 Used to add navigation to the app.
 
-- `react-navigation-props-mapper`
+- `react-navigation-props-mapper` -
 Used to access the `react-navigation`'s screen params as props. 
 
-- `react-native-vector-icons`
+- `react-native-vector-icons` -
 Used to add generic, predefined and public icons in the app.
 
-- `react-native-gesture-handler`
+- `react-native-gesture-handler` -
 Used to manage gestures made by the user on the screen. In the case of this project it is used for the "swipe to delete" feature. It is also internally used by `react-navigation`. 
 
-- `eslint` and `prettier`
+- `eslint` and `prettier` -
 Used to find and fix problems in the code. Also, ensure consistency in code writing along the project.
 
-- `husky` (along with `lint-staged`)
+- `husky` (along with `lint-staged`) -
 Used to run specific scripts at the moment a commit is done. In the case of this project, it is used to check that there are no TypeScript errors and then, using `lint-staged` automatically fixes issues related to `prettier`
 
 :v: **Enjoy!**
