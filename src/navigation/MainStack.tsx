@@ -27,6 +27,7 @@ const commonScreenOptions = {
   headerBackTitleVisible: false,
   headerStyle: {
     backgroundColor: themeColors.mainGreen,
+    elevation: 0,
   },
   headerTintColor: themeColors.white,
   headerTitleStyle: {
@@ -34,14 +35,19 @@ const commonScreenOptions = {
   },
 };
 
+const postDetailsScreenOptions = {
+  ...commonScreenOptions,
+  headerStyle: {
+    backgroundColor: themeColors.mainGreen,
+    elevation: 15,
+  },
+  title: isIos ? 'Post' : '',
+};
+
 const MainStack = () => (
   <Navigator initialRouteName="Posts" screenOptions={commonScreenOptions}>
     <Screen component={PostsScreen} name="Posts" />
-    <Screen
-      component={PostDetailsScreen}
-      name="PostDetails"
-      options={{ title: isIos ? 'Post' : '' }}
-    />
+    <Screen component={PostDetailsScreen} name="PostDetails" options={postDetailsScreenOptions} />
   </Navigator>
 );
 

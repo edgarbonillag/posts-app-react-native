@@ -59,7 +59,7 @@ export const SeparatorLine = styled(View)({
 
 export const styles = StyleSheet.create({
   postsFlatlist: {
-    backgroundColor: themeColors.white,
+    backgroundColor: themeColors.veryLightGray,
     width: '100%',
   },
   deleteButtonElevation: {

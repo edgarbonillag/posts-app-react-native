@@ -10,7 +10,13 @@ import { MainStackParamList } from '../../navigation/MainStack';
 import Icon from 'react-native-vector-icons/Ionicons';
 
 // COMPONENTS
-import { CustomText, PostListItem, RefreshButton } from '../../components';
+import {
+  CustomText,
+  PostListItem,
+  RefreshButton,
+  TabBarAndroid,
+  TabBarIos,
+} from '../../components';
 
 // STYLED
 import {
@@ -59,8 +65,16 @@ type Props = PropsFromRedux & {
   navigation: PostsScreenNavigationProp;
 };
 
+interface State {
+  tabBarIndex: number;
+}
+
 // MAIN CODE
 class Posts extends Component<Props> {
+  state = {
+    tabBarIndex: 0,
+  };
+
   componentDidMount() {
     const { navigation } = this.props;
     navigation.setOptions({
@@ -87,6 +101,10 @@ class Posts extends Component<Props> {
     deletePosts();
   };
 
+  changeTabBarindex = (index: number) => {
+    this.setState({ tabBarIndex: index });
+  };
+
   renderListItems = ({ item }: { item: PostEnhanced }) => {
     return (
       <PostListItem
@@ -100,6 +118,8 @@ class Posts extends Component<Props> {
 
   MainContent = () => {
     const { error, loading, posts } = this.props;
+    const { tabBarIndex } = this.state;
+    const favorites = posts.filter((post) => post.isFavorite === true);
 
     if (loading) {
       return (
@@ -125,9 +145,24 @@ class Posts extends Component<Props> {
       );
     }
 
+    if (favorites.length === 0 && tabBarIndex === 1) {
+      return (
+        <LoadingContainer>
+          <CustomText>You have no favorites yet :(</CustomText>
+        </LoadingContainer>
+      );
+    }
+
+    let data: PostEnhanced[] = [];
+    if (tabBarIndex === 0) {
+      data = posts;
+    } else {
+      data = favorites;
+    }
+
     return (
       <FlatList
-        data={posts}
+        data={data}
         ItemSeparatorComponent={() => <SeparatorLine />}
         keyExtractor={(item) => `${item.id}`}
         renderItem={this.renderListItems}
@@ -138,9 +173,15 @@ class Posts extends Component<Props> {
   };
 
   render() {
+    const { tabBarIndex } = this.state;
     return (
       <MainContainer>
         <StatusBar barStyle="light-content" backgroundColor={themeColors.darkMainGreen} />
+        {isIos ? (
+          <TabBarIos onPressTab={this.changeTabBarindex} selectedIndex={tabBarIndex} />
+        ) : (
+          <TabBarAndroid onPressTab={this.changeTabBarindex} selectedIndex={tabBarIndex} />
+        )}
         <this.MainContent />
         {isIos ? (
           <DeleteButton onPress={this.deleteAllPosts}>

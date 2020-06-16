@@ -138,16 +138,47 @@ class PostDetails extends Component<Props, State> {
 
   renderSeparatorComponent = () => <SeparatorLine />;
 
+  CommentSection = () => {
+    const { comments, commentsError, commentsLoading } = this.props;
+
+    if (commentsLoading) {
+      return (
+        <CommentsLoadingContainer>
+          <ActivityIndicator color={themeColors.mainGreen} size="large" />
+        </CommentsLoadingContainer>
+      );
+    }
+
+    if (commentsError) {
+      return (
+        <CommentsLoadingContainer>
+          <CustomText variant="error">Error: Unable to get Comments</CustomText>
+        </CommentsLoadingContainer>
+      );
+    }
+
+    if (comments.length === 0) {
+      return (
+        <CommentsLoadingContainer>
+          <CustomText>The Comments list is empty</CustomText>
+        </CommentsLoadingContainer>
+      );
+    }
+
+    return (
+      <FlatList
+        data={comments}
+        ItemSeparatorComponent={this.renderSeparatorComponent}
+        keyExtractor={(item) => `${item.id}`}
+        ListFooterComponent={this.renderSeparatorComponent}
+        renderItem={this.renderFlatlistItem}
+        scrollEnabled={false}
+      />
+    );
+  };
+
   render() {
-    const {
-      comments,
-      commentsError,
-      commentsLoading,
-      post,
-      users,
-      userError,
-      userLoading,
-    } = this.props;
+    const { post, users, userError, userLoading } = this.props;
 
     let userInfo: PickedUserInfo = {
       id: 0,
@@ -190,24 +221,7 @@ class PostDetails extends Component<Props, State> {
           <CommentsTitle>
             <CustomText variant="subtitle">COMMENTS</CustomText>
           </CommentsTitle>
-          {commentsLoading ? (
-            <CommentsLoadingContainer>
-              <ActivityIndicator color={themeColors.mainGreen} size="large" />
-            </CommentsLoadingContainer>
-          ) : commentsError ? (
-            <CommentsLoadingContainer>
-              <CustomText variant="error">Error: Unable to get Comments</CustomText>
-            </CommentsLoadingContainer>
-          ) : (
-            <FlatList
-              data={comments}
-              ItemSeparatorComponent={this.renderSeparatorComponent}
-              keyExtractor={(item) => `${item.id}`}
-              ListFooterComponent={this.renderSeparatorComponent}
-              renderItem={this.renderFlatlistItem}
-              scrollEnabled={false}
-            />
-          )}
+          <this.CommentSection />
         </ScrollContainer>
       </MainContainer>
     );
