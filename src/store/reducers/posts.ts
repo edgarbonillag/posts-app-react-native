@@ -5,6 +5,7 @@ import {
   MARK_POST_AS_READ,
   PostsActionTypes,
   DELETE_ALL_POSTS,
+  DELETE_POST,
 } from '../actions/types';
 import { PostEnhanced } from '../../types';
 
@@ -61,6 +62,14 @@ const posts = (state = initialState, action: PostsActionTypes): PostsState => {
       const { isRead, postId: postIdentifier } = action.payload;
       const indexOfReadPost = state.posts.findIndex((post) => post.id === postIdentifier);
       state.posts[indexOfReadPost].isRead = isRead;
+      return {
+        ...state,
+        updateChangeFlag: !state.updateChangeFlag,
+      };
+    case DELETE_POST:
+      const { postId: postIden } = action.payload;
+      const indexOfPostToDelete = state.posts.findIndex((post) => post.id === postIden);
+      state.posts.splice(indexOfPostToDelete, 1);
       return {
         ...state,
         updateChangeFlag: !state.updateChangeFlag,

@@ -1,6 +1,6 @@
 // REACT & REACT NATIVE
 import React, { Component } from 'react';
-import { ActivityIndicator, FlatList, StatusBar } from 'react-native';
+import { ActivityIndicator, StatusBar } from 'react-native';
 
 // NAVIGATION
 import { StackNavigationProp } from '@react-navigation/stack';
@@ -8,6 +8,7 @@ import { MainStackParamList } from '../../navigation/MainStack';
 
 // RESOURCES
 import Icon from 'react-native-vector-icons/Ionicons';
+import { FlatList } from 'react-native-gesture-handler';
 
 // COMPONENTS
 import {
@@ -36,6 +37,7 @@ import { isIos } from '../../utils/platform';
 // REDUX
 import { connect, ConnectedProps } from 'react-redux';
 import {
+  deleteSpecificPost as deletePostAction,
   deleteAllPosts as deleteAllPostsAction,
   getPosts as getPostsAction,
   markPostAsRead as markPostAsReadAction,
@@ -49,6 +51,7 @@ const mapStateToProps = ({ posts }: RootState) => ({
 });
 
 const mapDispatchToProps = {
+  deletePost: ({ postId }: { postId: number }) => deletePostAction({ postId }),
   deletePosts: () => deleteAllPostsAction(),
   getPostsList: () => getPostsAction(),
   markPostAsRead: ({ postId }: { postId: number }) => markPostAsReadAction({ postId }),
@@ -96,6 +99,11 @@ class Posts extends Component<Props> {
     }
   };
 
+  deletePost = ({ postId }: { postId: number }) => {
+    const { deletePost } = this.props;
+    deletePost({ postId });
+  };
+
   deleteAllPosts = () => {
     const { deletePosts } = this.props;
     deletePosts();
@@ -111,10 +119,13 @@ class Posts extends Component<Props> {
         isFavorite={item.isFavorite}
         isRead={item.isRead}
         onPress={() => this.onPressPostItem({ post: item })}
+        onSwipeLeft={() => this.deletePost({ postId: item.id })}
         text={item.title}
       />
     );
   };
+
+  renderSeparatorLine = () => <SeparatorLine />;
 
   MainContent = () => {
     const { error, loading, posts } = this.props;
@@ -163,11 +174,11 @@ class Posts extends Component<Props> {
     return (
       <FlatList
         data={data}
-        ItemSeparatorComponent={() => <SeparatorLine />}
+        ItemSeparatorComponent={this.renderSeparatorLine}
         keyExtractor={(item) => `${item.id}`}
         renderItem={this.renderListItems}
         style={styles.postsFlatlist}
-        ListFooterComponent={() => <SeparatorLine />}
+        ListFooterComponent={this.renderSeparatorLine}
       />
     );
   };

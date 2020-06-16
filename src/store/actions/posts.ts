@@ -1,6 +1,7 @@
 // REDUX
 import { Dispatch } from 'redux';
 import {
+  DELETE_POST,
   DELETE_ALL_POSTS,
   GET_POSTS,
   SET_LOADING_POSTS,
@@ -13,6 +14,12 @@ import {
 import { getPostsService } from '../../services';
 
 // MAIN CODE
+
+export const deleteSpecificPost = ({ postId }: { postId: number }) => {
+  return (dispatch: Dispatch<PostsActionTypes>) => {
+    dispatch({ type: DELETE_POST, payload: { postId } });
+  };
+};
 
 export const deleteAllPosts = () => {
   return (dispatch: Dispatch<PostsActionTypes>) => {

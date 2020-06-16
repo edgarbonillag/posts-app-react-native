@@ -25,15 +25,24 @@ export type CommentsActionTypes = GetPostDetailsAction | SetLoadingCommentsActio
 
 // POSTS
 
+export const DELETE_POST = 'DELETE_POST';
 export const DELETE_ALL_POSTS = 'DELETE_ALL_POSTS';
 export const GET_POSTS = 'GET_POSTS';
 export const SET_LOADING_POSTS = 'SET_LOADING_POSTS';
 export const MARK_POST_AS_FAVORITE = 'MARK_POST_AS_FAVORITE';
 export const MARK_POST_AS_READ = 'MARK_POST_AS_READ';
 
+interface DeletePostAction {
+  type: typeof DELETE_POST;
+  payload: {
+    postId: number;
+  };
+}
+
 interface DeleteAllPostsAction {
   type: typeof DELETE_ALL_POSTS;
 }
+
 interface GetPostsAction {
   type: typeof GET_POSTS;
   payload: {
@@ -67,6 +76,7 @@ interface MarkPostReadAction {
 }
 
 export type PostsActionTypes =
+  | DeletePostAction
   | DeleteAllPostsAction
   | GetPostsAction
   | SetLoadingPostsAction

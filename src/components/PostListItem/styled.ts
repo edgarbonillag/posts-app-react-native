@@ -1,5 +1,7 @@
 // REACT NATIVE
-import { TouchableOpacity, View } from 'react-native';
+import { View, StyleSheet } from 'react-native';
+
+import { RectButton } from 'react-native-gesture-handler';
 
 // STYLING
 import styled from 'styled-components/native';
@@ -15,6 +17,15 @@ export const BlueDot = styled(View)({
   width: 14,
 });
 
+export const DeleteIconContainer = styled(View)({
+  alignItems: 'center',
+  backgroundColor: themeColors.deleteRed,
+  flex: 1,
+  flexDirection: 'row',
+  height: '100%',
+  justifyContent: 'flex-end',
+});
+
 export const IconContainer = styled(View)({
   alignItems: 'center',
   height: 26,
@@ -22,7 +33,7 @@ export const IconContainer = styled(View)({
   width: 26,
 });
 
-export const MainContainer = styled(TouchableOpacity)({
+export const MainContainer = styled(RectButton)({
   alignItems: 'center',
   backgroundColor: isIos ? themeColors.white : themeColors.veryLightGray,
   flexDirection: 'row',
@@ -36,4 +47,11 @@ export const TextContainer = styled(View)({
   flex: 1,
   justifyContent: 'center',
   marginLeft: 10,
+});
+
+export const styles = StyleSheet.create({
+  animatedIcon: {
+    marginHorizontal: 10,
+    width: 30,
+  },
 });
